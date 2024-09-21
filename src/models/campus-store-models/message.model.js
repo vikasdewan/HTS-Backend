@@ -7,7 +7,7 @@
 //   timestamp: Date
 // }
 import mongoose from "mongoose";
-
+import { Schema } from "mongoose";
 const messageSchema = new mongoose.Schema(
   {
       productId: {

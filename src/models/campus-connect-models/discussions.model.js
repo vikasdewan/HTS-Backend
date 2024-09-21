@@ -7,20 +7,21 @@
 // }
 
 import mongoose from "mongoose";
-
+import { Schema } from "mongoose";
 const discussionSchema = new mongoose.Schema(
   {
-    discussionId: {
-      type: String,
-      required: true,
-    },
-    title: {
+     title: {
       type: String,
       required: true,
     },
     description: {
       type: String,
       required: true,
+    },
+    messages:{
+      type: Schema.Types.ObjectId,
+      ref: "MessageModel",
+      required:true
     },
     createdBy: {
       type: String,
@@ -31,3 +32,4 @@ const discussionSchema = new mongoose.Schema(
 );
 
 const DiscussionModel = mongoose.model("Discussion Details", discussionSchema);
+export default DiscussionModel;

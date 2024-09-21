@@ -10,10 +10,6 @@ import mongoose from "mongoose";
 
 const menuSchema = new mongoose.Schema(
   {
-    menuId: {
-      type: String,
-      required: true,
-    },
     canteenId: {
       type: String,
       required: true,
@@ -26,6 +22,12 @@ const menuSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    offer:{
+      type:String
+    },
+    review:{
+      type:String,
+    }
   },
   { timestamps: true }
 );

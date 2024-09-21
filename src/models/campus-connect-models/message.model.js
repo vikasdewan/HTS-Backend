@@ -7,20 +7,19 @@
 // }
 
 import mongoose from "mongoose";
-
+import { Schema } from "mongoose";
 const messageSchema = new mongoose.Schema(
   {
-    messageId: {
-      type: String,
-      required: true,
-    },
+    
     senderId: {
-      type: String,
-      required: true,
+      type: Schema.Types.ObjectId,
+       ref: "UserModel",
+       required:true
     },
     receiverId: {
-      type: String,
-      required: true,
+      type: Schema.Types.ObjectId,
+      ref: "UserModel",
+      required:true
     },
     message: {
       type: String,

@@ -12,28 +12,30 @@ import mongoose from "mongoose";
 
 const preorderSchema = new mongoose.Schema(
   {
-    orderId: {
-      type: String,
-      required: true,
-    },
-    userId: {
-      type: String,
-      required: true,
+    
+    orderedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "UserModel",
+     required: true,
     },
     canteenId: {
       type: String,
       required: true,
     },
     items: {
-      type: [String],
+      type: [],
       required: true,
+    },
+    quantity:{
+      type:Number,
+      default:1
     },
     totalAmount: {
       type: Number,
       required: true,
     },
     status: {
-      type: String,
+      type: Boolean,
       required: true,
     },
   },
