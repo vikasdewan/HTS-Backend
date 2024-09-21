@@ -1,13 +1,3 @@
-// {
-//   celebrationId: String,
-//   title: String,
-//   description: String,
-//   date: Date,
-//   location: String,
-//   createdBy: String,
-//   createdAt: Date
-// }
-
 import mongoose from "mongoose";
 
 const celebrationSchema = new mongoose.Schema(

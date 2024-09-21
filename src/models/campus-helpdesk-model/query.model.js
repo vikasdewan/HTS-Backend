@@ -1,11 +1,3 @@
-// {
-//   queryId: String,
-//   userId: String,
-//   question: String,
-//   status: String, // open, in-progress, resolved
-//   createdAt: Date
-// }
-
 import mongoose from "mongoose";
 
 const querySchema = new mongoose.Schema(
