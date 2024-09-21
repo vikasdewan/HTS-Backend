@@ -2,28 +2,27 @@ import mongoose from "mongoose";
 
 const paymentSchema = new mongoose.Schema(
   {
-    paymentId: {
-      type: String,
-      required: true,
-    },
+ 
     productId: {
       type: String,
       required: true,
     },
     buyerId: {
-      type: String,
-      required: true,
+      type: Schema.Types.ObjectId,
+       ref: "UserModel",
+       required:true
     },
     sellerId: {
-      type: String,
-      required: true,
+      type: Schema.Types.ObjectId,
+       ref: "UserModel",
+       required:true
     },
     amount: {
       type: Number,
       required: true,
     },
     status: {
-      type: String,
+      type: Boolean,
       required: true,
     },
     paymentMethod: {

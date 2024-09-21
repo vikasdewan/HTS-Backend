@@ -10,21 +10,22 @@ import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema(
   {
-    messageId: {
-      type: String,
-      required: true,
-    },
-    productId: {
-      type: String,
-      required: true,
+      productId: {
+        type: Schema.Types.ObjectId,
+        ref: "ProductsModel",
+     
     },
     senderId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+       ref: "UserModel",
       required: true,
+
     },
     receiverId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "UserModel",
       required: true,
+
     },
     message: {
       type: String,
