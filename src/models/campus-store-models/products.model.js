@@ -1,12 +1,7 @@
 import mongoose from "mongoose";
-
+import { Schema } from "mongoose";
 const productSchema = new mongoose.Schema(
   {
-    productId: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     name: {
       type: String,
       required: true,
@@ -24,8 +19,13 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     sellerId: {
-      type: String,
-      required: true,
+      type: Schema.Types.ObjectId,
+       ref: "UserModel",
+       required:true
+    },
+    buyerId: {
+      type: Schema.Types.ObjectId,
+       ref: "UserModel",
     },
     images: {
       type: [String],
@@ -34,9 +34,6 @@ const productSchema = new mongoose.Schema(
     sold: {
       type: Boolean,
       default: false,
-    },
-    createdAt: {
-      type: { type: Date, default: Date.now },
     },
   },
   { timestamps: true }
