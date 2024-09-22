@@ -163,6 +163,14 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, { user }, "current user fetched successfully"));
 });
 
+//Get All User (for listing )
+const getAllUser = asyncHandler(async (req,res)=>{
+  const users = await UserModel.find();
+  return res
+  .status(200)
+  .json(new ApiResponse(201,{users},"All User Fetched Successfully"));
+})
+
 //update user details
 const updateAccountDetails = asyncHandler(async (req, res) => {
   const { name, email, course, branch_section, year, bio, interests } =
@@ -226,6 +234,7 @@ export {
   logoutUser,
   changeCurrentPassword,
   getCurrentUser,
+  getAllUser,
   updateAccountDetails,
   updateProfileImage,
 };
