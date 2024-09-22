@@ -1,16 +1,8 @@
-// {
-//   discussionId: String,
-//   title: String,
-//   description: String,
-//   createdBy: String,
-//   createdAt: Date
-// }
-
 import mongoose from "mongoose";
 import { Schema } from "mongoose";
 const discussionSchema = new mongoose.Schema(
   {
-     title: {
+    title: {
       type: String,
       required: true,
     },
@@ -18,10 +10,10 @@ const discussionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    messages:{
+    messages: {
       type: Schema.Types.ObjectId,
       ref: "MessageModel",
-      required:true
+      required: true,
     },
     createdBy: {
       type: String,

@@ -1,16 +1,11 @@
-// {
-//   userId: String,
-//   friends: [String]
-// }
-
 import mongoose from "mongoose";
 import { Schema } from "mongoose";
 const friendSchema = new mongoose.Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
-       ref: "UserModel",
-       required:true,
+      ref: "UserModel",
+      required: true,
     },
     friends: {
       type: [Schema.Types.ObjectId],
