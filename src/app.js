@@ -19,15 +19,15 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 //campus connect
-const campusConnectRouter = require("./routes/campus-connect.route.js");
+const campusConnectRouter = import("./routes/campus-connect.route.js");
 app.use("/api/v1/campus-connect", campusConnectRouter);
 
 //campus store
-const campusStoreRouter = require("./routes/campus-store.route.js");
+const campusStoreRouter = import("./routes/campus-store.route.js");
 app.use("/api/v1/campus-store", campusStoreRouter);
 
 //campus eat
-const campusEatRouter = require("./routes/campus-eat.route.js");
+const campusEatRouter = import("./routes/campus-eat.route.js");
 app.use("/api/v1/campus-eat", campusEatRouter);
 
 
