@@ -130,4 +130,102 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
-export { registerUser, loginUser };
+//User Logout
+const logoutUser = asyncHandler(async (req, res) => {
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .json(new ApiResponse(200, "User LoggedOut SuccessFully"));
+});
+
+//Password Changing
+const changeCurrentPassword = asyncHandler(async (req, res) => {
+  //taking input from user
+  const { oldPassword, newPassword } = req.body;
+  const user = await UserModel.findById(req.user?._id);
+  const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+  if (!isPasswordCorrect) {
+    throw new ApiError(401, "Old password is incorrect");
+  }
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(201, {}, "Password Changed Successfully"));
+});
+
+//User Profile
+const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = await UserModel.findById(req.user?._id);
+  return res
+    .status(200)
+    .json(new ApiResponse(201, { user }, "current user fetched successfully"));
+});
+
+//update user details
+const updateAccountDetails = asyncHandler(async (req, res) => {
+  const { name, email, course, branch_section, year, bio, interests } =
+    req.body;
+  if (
+    !(name && email && course && branch_section && year && bio && interests)
+  ) {
+    throw new ApiError(400, "Fields Cannot be empty");
+  }
+
+  const user = await UserModel.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        nameame,
+        email,
+        course,
+        branch_section,
+        year,
+        bio,
+        interests,
+      },
+    },
+    { new: true } //by this updated user is returned
+  ).select("-password");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(201, user, "Account Details Updated Successfully"));
+});
+
+//updating profile image
+const updateProfileImage = asyncHandler(async (req, res) => {
+  const profileImageLocalPath = req.file?.path;
+  if (!profileImageLocalPath) {
+    throw new ApiError(401, "Avatar is required to update ");
+  }
+  const profileImage = await uploadOnCloudinary(profileImageLocalPath);
+  if (!profileImage.url) {
+    throw new ApiError(500, "Error on uploading on avatar");
+  }
+  const user = await UserModel.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        profileImage: profileImage.secure_url,
+      },
+    },
+    {
+      new: true,
+    }
+  ).select("-password");
+  return res
+    .status(200)
+    .json(new ApiResponse(201, user, "avatar changes successfully"));
+});
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  changeCurrentPassword,
+  getCurrentUser,
+  updateAccountDetails,
+  updateProfileImage,
+};
