@@ -1,10 +1,3 @@
-// {
-//     post event
-//     update event
-//     delete event
-//     get single event
-//     get all event
-// }
 import EventModel from "../../models/campus-connect-models/event.model.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiError } from "../../utils/ApiError.js";
@@ -67,6 +60,7 @@ const updateEvent = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, { updatedEvent }, "Event Updated Successfully"));
 });
 
+//Delete The Event 
 const deleteEvent = asyncHandler(async (req, res) => {
   const { id } = req.params;
   if (!id) {
@@ -83,4 +77,31 @@ const deleteEvent = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(201, {deletedEvent}, "Event Deleted Successfully"));
 });
-export { addEvent, updateEvent , deleteEvent };
+
+//get Event Details 
+const getEventDetails = asyncHandler(async(req,res)=>{
+  const { id } = req.params;
+  if (!id) {
+    throw new ApiError(404, "Event Id Not Present in Parameter");
+  }
+  const event = await EventModel.findById(id);
+  if (!event) {
+    throw new ApiError(404, "No Such Event Found || Wrong Event Id");
+  }
+  return res
+    .status(201)
+    .json(new ApiResponse(201, {event}, "Event Fetched Successfully"));
+});
+
+// Get Details of All Events 
+const getAllEvents = asyncHandler(async(req,res)=> {
+   const events = await EventModel.find();
+   if(!events){
+      throw new ApiError(404, "No Events Available");
+   }
+   return res
+   .status(201)
+   .json(new ApiResponse(201, {events}, "All Event Fetched Successfully"));
+})
+
+export { addEvent, updateEvent , deleteEvent,getEventDetails,getAllEvents };
