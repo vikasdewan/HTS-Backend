@@ -20,12 +20,12 @@ const productSchema = new mongoose.Schema(
     },
     sellerId: {
       type: Schema.Types.ObjectId,
-       ref: "UserModel",
-       required:true
+      ref: "UserModel",
+      required: true,
     },
     buyerId: {
       type: Schema.Types.ObjectId,
-       ref: "UserModel",
+      ref: "UserModel",
     },
     images: {
       type: [String],
