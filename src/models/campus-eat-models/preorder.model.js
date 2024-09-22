@@ -1,22 +1,12 @@
-// {
-//   orderId: String,
-//   userId: String,
-//   canteenId: String,
-//   items: [String],
-//   totalAmount: Number,
-//   status: String,
-//   orderTime: Date
-// }
-
+import { Schema } from "mongoose";
 import mongoose from "mongoose";
 
 const preorderSchema = new mongoose.Schema(
   {
-    
     orderedBy: {
       type: Schema.Types.ObjectId,
       ref: "UserModel",
-     required: true,
+      required: true,
     },
     canteenId: {
       type: String,
@@ -26,9 +16,9 @@ const preorderSchema = new mongoose.Schema(
       type: [],
       required: true,
     },
-    quantity:{
-      type:Number,
-      default:1
+    quantity: {
+      type: Number,
+      default: 1,
     },
     totalAmount: {
       type: Number,

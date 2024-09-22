@@ -1,11 +1,3 @@
-// {
-//   menuId: String,
-//   canteenId: String,
-//   foodItems: [String],
-//   price: Number,
-//   date: Date
-// }
-
 import mongoose from "mongoose";
 
 const menuSchema = new mongoose.Schema(
@@ -22,12 +14,12 @@ const menuSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    offer:{
-      type:String
+    offer: {
+      type: String,
     },
-    review:{
-      type:String,
-    }
+    review: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
