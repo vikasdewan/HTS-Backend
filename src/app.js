@@ -28,10 +28,8 @@ app.use("/api/v1/campus-store", campusStoreRouter);
 
 //campus eat
 const campusEatRouter = require("./routes/campus-eat.route.js");
-app.use("/api/v1/campus-eat/", campusEatRouter);
+app.use("/api/v1/campus-eat", campusEatRouter);
 
-//campus qna
-const campusQnARouter = require("./routes/campus-qna.route.js");
-app.use("/api/v1/campus-qna/", campusQnARouter);
+
 
 export { app };
