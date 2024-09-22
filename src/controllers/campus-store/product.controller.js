@@ -1,4 +1,4 @@
-import ProductsModel from "../../models/campus-store-models/products.model";
+import ProductsModel from "../../models/campus-store-models/products.model.js";
 export async function getAllProducts(req, res) {
   try {
     const products = await ProductsModel.find();

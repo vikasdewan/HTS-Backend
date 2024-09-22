@@ -1,14 +1,12 @@
 import UserModel from "../../models/campus-connect-models/user.model.js";
-import { asyncHandler } from "../../utils/asyncHandler";
-import { ApiError } from "../../utils/ApiError";
+import { asyncHandler } from "../../utils/asyncHandler.js";
+import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../../utils/cloudinary.js";
 
-//Genrating Access Token
 const genratingAccessToken = async (userId) => {
   try {
     const user = await UserModel.findById(userId);
-
     const accessToken = user.genrateAccessToken();
 
     user.refreshToken = refreshToken;
@@ -20,11 +18,10 @@ const genratingAccessToken = async (userId) => {
   }
 };
 
-//option for cookies 
 const options = {
-    httpOnly:true,
-    secure:true
- }
+  httpOnly: true,
+  secure: true,
+};
 
 //User Registration
 const registerUser = asyncHandler(async (req, res) => {
@@ -133,4 +130,4 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
-export {registerUser,loginUser}
+export { registerUser, loginUser };
