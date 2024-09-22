@@ -84,7 +84,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     return res
       .status(201)
-      .json(new ApiResponse(201, newUser, "User Registered Successfully"));
+      .json(new ApiResponse(201, {newUser}, "User Registered Successfully"));
   } catch (error) {
     return res.status(500).json({ message: "Internal server error occured" });
   }
@@ -199,7 +199,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(201, user, "Account Details Updated Successfully"));
+    .json(new ApiResponse(201, {user}, "Account Details Updated Successfully"));
 });
 
 //updating profile image

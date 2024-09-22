@@ -13,6 +13,10 @@ import {
   updateProfileImage,
 } from "../controllers/campus-connect/user.controllers.js";
 
+import {
+addEvent,
+updateEvent
+} from '../controllers/campus-connect/event.controllers.js'
 //Routes for User 
 router
   .route("/user/register")
@@ -26,4 +30,8 @@ router.route("/user/all").get(verifyJWT,getAllUser);
 router.route("/user/update-account").patch(verifyJWT,updateAccountDetails);
 router.route("/user/update/profileImage").patch(verifyJWT,upload.single("profileImage"),updateProfileImage);
 
+
+//Event Related Route
+router.route("/event/add").post(verifyJWT,addEvent);
+router.route("/event/update/:id").patch(verifyJWT,updateEvent);
 export default router;
