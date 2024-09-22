@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema(
     password:{
       type:String,
       required:true,
-      min:[8,"Password Should be more than 8 marks"]
+      min:[8,"Password Should be at least 8 marks"]
     },
     course: {
       type: String,
@@ -50,6 +50,20 @@ const userSchema = new mongoose.Schema(
     profileImage: {
       type: String,
     },
+     // Friend relationships
+     friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'UserModel', // Reference to another User document
+      }
+    ],
+    // Friend requests - Array of user IDs for pending requests
+    friendRequests: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'UserModel', // User who sent the request
+      }
+    ],
   },
   { timestamps: true }
 );
@@ -72,7 +86,6 @@ userSchema.methods.genrateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
-      userId: this.userId,
       name: this.name,
     },
     process.env.ACCESS_TOKEN_SECRET,
