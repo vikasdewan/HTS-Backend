@@ -9,9 +9,11 @@ import EventModel from "../../models/campus-connect-models/event.model.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
+import { uploadOnCloudinary } from "../../utils/cloudinary.js";
 
 //Adding a new Event 
 const addEvent = asyncHandler(async (req, res) => {
+
   const { title, location, description, organizer, date, applyLink } = req.body;
   if (!(title && location && description && organizer && date && applyLink)) {
     throw new ApiError(404, "All Details are Mandatory ");
@@ -19,6 +21,12 @@ const addEvent = asyncHandler(async (req, res) => {
   const userId = req.user?._id;
   if (!userId) {
     throw new ApiError(404, "User Id Not Found ");
+  }
+
+  const posterLocalPath = req.files?.poster[0]?.path;
+  let poster;
+  if(posterLocalPath){
+    poster = await uploadOnCloudinary(posterLocalPath);
   }
 
   const event = await EventModel.create({
@@ -29,6 +37,7 @@ const addEvent = asyncHandler(async (req, res) => {
     date,
     applyLink,
     postedBy: userId,
+    poster:poster?.secure_url || ""
   });
 
   if (!event) {

@@ -32,6 +32,6 @@ router.route("/user/update/profileImage").patch(verifyJWT,upload.single("profile
 
 
 //Event Related Route
-router.route("/event/add").post(verifyJWT,addEvent);
+router.route("/event/add").post(verifyJWT,upload.single('poster'),addEvent);
 router.route("/event/update/:id").patch(verifyJWT,updateEvent);
 export default router;

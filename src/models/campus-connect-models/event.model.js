@@ -30,6 +30,9 @@ const eventSchema = new mongoose.Schema(
     applyLink: {
       type: String,
     },
+    poster:{
+      type:String,//cloudinary url
+    }
   },
   { timestamps: true }
 );
