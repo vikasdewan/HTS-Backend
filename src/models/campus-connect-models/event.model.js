@@ -1,18 +1,7 @@
-// {
-//   eventId: String,
-//   title: String,
-//   description: String,
-//   location: String,
-//   organizer: String,
-//   date: Date,
-//   createdAt: Date
-
-// }
 import mongoose from "mongoose";
 import { Schema } from "mongoose";
 const eventSchema = new mongoose.Schema(
   {
-   
     title: {
       type: String,
       required: true,
@@ -33,14 +22,14 @@ const eventSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    postedBy:{
+    postedBy: {
       type: Schema.Types.ObjectId,
-       ref: "UserModel",
-       required:true
+      ref: "UserModel",
+      required: true,
     },
-    applyLink:{
-      type:String,
-    }
+    applyLink: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

@@ -1,21 +1,9 @@
-const express = require("express");
-
+import express from "express";
 const router = express.Router();
+import { createNewAccount } from "../controllers/campus-connect.controller";
 
-router.get("/user", getUserInformation);
-router.post("/user", createUser);
-router.put("/user", updateUser);
-router.delete("/user", deleteUser);
+router.post("/user", createNewAccount);
 
-router.get("/notification", getAllNotification);
-router.get("/discussion", getDiscussionController);
-
-router.get("/event", getEventController);
-router.get("/friend", getFriendController);
-router.delete("/friend:id", deleteFriendController);
-
-router.get("/message", getMessageController);
-router.post("/message", postMessageController);
-router.delete("/message:id", deleteMessageController);
+router.post("/user/login", userLogin);
 
 module.exports = router;
