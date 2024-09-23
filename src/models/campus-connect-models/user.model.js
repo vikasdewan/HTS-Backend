@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema(
       required:true,
       min:[8,"Password Should be at least 8 marks"]
     },
+    college: {
+      type: String,
+      required: true,
+    },
     course: {
       type: String,
       required: true,

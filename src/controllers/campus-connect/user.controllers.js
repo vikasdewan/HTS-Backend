@@ -163,13 +163,42 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, { user }, "current user fetched successfully"));
 });
 
-//Get All User (for listing )
+//Get All User (for listing only not for use in website)
 const getAllUser = asyncHandler(async (req,res)=>{
   const users = await UserModel.find();
   return res
   .status(200)
   .json(new ApiResponse(201,{users},"All User Fetched Successfully"));
 })
+
+// Get All Users of Same College
+const getAllUserOfCollage = asyncHandler(async (req, res) => {
+  const userId = req.user?._id; // Get the current user's ID
+
+  if (!userId) {
+    throw new ApiError(404, "Student not found");
+  }
+
+  // Find the user by their ID and select only the college field
+  const user = await UserModel.findById(userId).select("college");
+
+  if (!user || !user.college) {
+    throw new ApiError(404, "College name not found for this student");
+  }
+
+  // Find all students from the same college
+  const collageStudents = await UserModel.find({ college: user.college });
+
+  if (!collageStudents || collageStudents.length === 0) {
+    throw new ApiError(400, "No students available from the same college");
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200, { collageStudents }, "All users fetched successfully")
+  );
+});
+
+
 
 //update user details
 const updateAccountDetails = asyncHandler(async (req, res) => {
@@ -237,4 +266,5 @@ export {
   getAllUser,
   updateAccountDetails,
   updateProfileImage,
+  getAllUserOfCollage
 };

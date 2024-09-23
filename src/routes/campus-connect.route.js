@@ -12,6 +12,7 @@ import {
   getAllUser,
   updateAccountDetails,
   updateProfileImage,
+  getAllUserOfCollage
 } from "../controllers/campus-connect/user.controllers.js";
 
 //Event controllers import
@@ -33,6 +34,7 @@ router.route("/user/logout").get(verifyJWT, logoutUser);
 router.route("/user/change-password").post(verifyJWT, changeCurrentPassword);
 router.route("/user/current-user").get(verifyJWT, getCurrentUser);
 router.route("/user/all").get(verifyJWT, getAllUser);
+router.route("/user/college/all").get(verifyJWT, getAllUserOfCollage);
 router.route("/user/update-account").patch(verifyJWT, updateAccountDetails);
 router
   .route("/user/update/profileImage")
