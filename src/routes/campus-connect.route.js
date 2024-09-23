@@ -12,7 +12,7 @@ import {
   getAllUser,
   updateAccountDetails,
   updateProfileImage,
-  getAllUserOfCollage
+  getAllUserOfCollage,
 } from "../controllers/campus-connect/user.controllers.js";
 
 //Event controllers import
@@ -23,6 +23,16 @@ import {
   getEventDetails,
   updateEvent,
 } from "../controllers/campus-connect/event.controllers.js";
+
+//Friend Controllers import
+import {
+  sendFriendRequest,
+  acceptFriendRequest,
+  rejectFriendRequest,
+  getFriendRequests,
+  getAllFriends,
+} from "../controllers/campus-connect/friends.controllers.js";
+
 
 //Routes for User
 router
@@ -46,4 +56,11 @@ router.route("/event/update/:id").patch(verifyJWT, updateEvent);
 router.route("/event/delete/:id").delete(verifyJWT, deleteEvent);
 router.route("/event/:id").get(verifyJWT, getEventDetails);
 router.route("/event/all").get(verifyJWT, getAllEvents);
+
+//Friend Related Route 
+router.route('/friend/send/:id').post(verifyJWT, sendFriendRequest);
+router.route('/friend/accept/:id').post(verifyJWT, acceptFriendRequest);
+router.route('/friend/reject/:id').post(verifyJWT, rejectFriendRequest);
+router.route('/friend/requests').get(verifyJWT, getFriendRequests);
+router.route('/friend/all').get(verifyJWT, getAllFriends);
 export default router;
