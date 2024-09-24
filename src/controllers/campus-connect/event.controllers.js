@@ -19,6 +19,9 @@ const addEvent = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(404, "User Not Found");
   }
+  if(!user.isEventOrganizer){
+    throw new ApiError(404,"Only Event Organizer Can add Event");
+  }
   const posterLocalPath = req.files?.poster[0]?.path;
   let poster;
   if (posterLocalPath) {

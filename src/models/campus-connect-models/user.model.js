@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Schema } from "mongoose";
+import validator from "validator";
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -17,6 +19,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       unique: true,
       required: true,
+      validate:[validator.isEmail,"Provide a valid email"]
     },
     rollnum: {
       type: Number,
@@ -26,7 +29,7 @@ const userSchema = new mongoose.Schema(
     password:{
       type:String,
       required:true,
-      min:[8,"Password Should be at least 8 marks"]
+      minLength:[8,"Password Should be at least 8 marks"]
     },
     college: {
       type: String,
@@ -43,10 +46,11 @@ const userSchema = new mongoose.Schema(
     year: {
       type: Number,
       required: true,
+      enum:[1,2,3,4]
     },
     bio: {
       type: String,
-      min: 30,
+      minLength: [30,"Bio length atleast contain 30 characters"],
     },
     interests: {
       type: [String],
@@ -58,11 +62,7 @@ const userSchema = new mongoose.Schema(
       type:Boolean,
       default:false
     },
-    isEventOrganizer:{
-      type:Boolean,
-      default:false
-    },
-     // Friend relationships
+    // Friend relationships
      friends: [
       {
         type: Schema.Types.ObjectId,
