@@ -54,6 +54,14 @@ const userSchema = new mongoose.Schema(
     profileImage: {
       type: String,
     },
+    isEventOrganizer:{
+      type:Boolean,
+      default:false
+    },
+    isEventOrganizer:{
+      type:Boolean,
+      default:false
+    },
      // Friend relationships
      friends: [
       {

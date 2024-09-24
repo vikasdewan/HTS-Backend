@@ -198,8 +198,6 @@ const getAllUserOfCollage = asyncHandler(async (req, res) => {
   );
 });
 
-
-
 //update user details
 const updateAccountDetails = asyncHandler(async (req, res) => {
   const { name, email, course, branch_section, year, bio, interests } =

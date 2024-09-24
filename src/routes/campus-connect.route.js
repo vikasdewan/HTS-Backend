@@ -19,6 +19,7 @@ import {
 import {
   addEvent,
   deleteEvent,
+  getAllEventOfCollage,
   getAllEvents,
   getEventDetails,
   updateEvent,
@@ -56,6 +57,7 @@ router.route("/event/update/:id").patch(verifyJWT, updateEvent);
 router.route("/event/delete/:id").delete(verifyJWT, deleteEvent);
 router.route("/event/:id").get(verifyJWT, getEventDetails);
 router.route("/event/all").get(verifyJWT, getAllEvents);
+router.route("/event/all-collage").get(verifyJWT, getAllEventOfCollage);
 
 //Friend Related Route 
 router.route('/friend/send/:id').post(verifyJWT, sendFriendRequest);

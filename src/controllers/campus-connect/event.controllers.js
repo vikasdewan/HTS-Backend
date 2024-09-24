@@ -3,6 +3,7 @@ import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../../utils/cloudinary.js";
+import UserModel from "../../models/campus-connect-models/user.model.js";
 
 //Adding a new Event
 const addEvent = asyncHandler(async (req, res) => {
@@ -14,7 +15,10 @@ const addEvent = asyncHandler(async (req, res) => {
   if (!userId) {
     throw new ApiError(404, "User Id Not Found ");
   }
-
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User Not Found");
+  }
   const posterLocalPath = req.files?.poster[0]?.path;
   let poster;
   if (posterLocalPath) {
@@ -30,6 +34,7 @@ const addEvent = asyncHandler(async (req, res) => {
     applyLink,
     postedBy: userId,
     poster: poster?.secure_url || "",
+    college: user?.college,
   });
 
   if (!event) {
@@ -60,7 +65,7 @@ const updateEvent = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, { updatedEvent }, "Event Updated Successfully"));
 });
 
-//Delete The Event 
+//Delete The Event
 const deleteEvent = asyncHandler(async (req, res) => {
   const { id } = req.params;
   if (!id) {
@@ -75,11 +80,11 @@ const deleteEvent = asyncHandler(async (req, res) => {
   });
   return res
     .status(201)
-    .json(new ApiResponse(201, {deletedEvent}, "Event Deleted Successfully"));
+    .json(new ApiResponse(201, { deletedEvent }, "Event Deleted Successfully"));
 });
 
-//get Event Details 
-const getEventDetails = asyncHandler(async(req,res)=>{
+//get Event Details
+const getEventDetails = asyncHandler(async (req, res) => {
   const { id } = req.params;
   if (!id) {
     throw new ApiError(404, "Event Id Not Present in Parameter");
@@ -90,18 +95,38 @@ const getEventDetails = asyncHandler(async(req,res)=>{
   }
   return res
     .status(201)
-    .json(new ApiResponse(201, {event}, "Event Fetched Successfully"));
+    .json(new ApiResponse(201, { event }, "Event Fetched Successfully"));
 });
 
-// Get Details of All Events 
-const getAllEvents = asyncHandler(async(req,res)=> {
-   const events = await EventModel.find();
-   if(!events){
-      throw new ApiError(404, "No Events Available");
-   }
-   return res
-   .status(201)
-   .json(new ApiResponse(201, {events}, "All Event Fetched Successfully"));
-})
+// Get Details of All Events
+const getAllEvents = asyncHandler(async (req, res) => {
+  const events = await EventModel.find();
+  if (!events) {
+    throw new ApiError(404, "No Events Available");
+  }
+  return res
+    .status(201)
+    .json(new ApiResponse(201, { events }, "All Event Fetched Successfully"));
+});
 
-export { addEvent, updateEvent , deleteEvent,getEventDetails,getAllEvents };
+//Get All Event of my collage
+const getAllEventOfCollage = asyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+  if (!userId) {
+    throw new ApiError(404, "User Not Found");
+  }
+  const user = await UserModel.findById(userId);
+  if(!user){
+    throw new ApiError(404,"User Not Found");
+  }
+  const events = await EventModel.find({college:user.college});
+  if(!events){
+    throw new ApiError(404,"Event Not Available");
+  }
+
+  return res
+  .status(201)
+  .json(new ApiResponse(201,{events},"All Events are Fetched"));
+});
+
+export { addEvent, updateEvent, deleteEvent, getEventDetails, getAllEvents,getAllEventOfCollage };
