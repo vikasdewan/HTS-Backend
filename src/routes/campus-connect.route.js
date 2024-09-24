@@ -34,6 +34,15 @@ import {
   getAllFriends,
 } from "../controllers/campus-connect/friends.controllers.js";
 
+//Career related imports
+import {
+  addOpportunity,
+  updateOpportunity,
+  deleteOpportunity,
+  getOpportunityDetails,
+  getAllOpportunities,
+  getAllOpportunitiesOfCollege,
+} from "../controllers/campus-connect/opportunities.controllers.js";
 
 //Routes for User
 router
@@ -59,10 +68,19 @@ router.route("/event/:id").get(verifyJWT, getEventDetails);
 router.route("/event/all").get(verifyJWT, getAllEvents);
 router.route("/event/all-collage").get(verifyJWT, getAllEventOfCollage);
 
-//Friend Related Route 
-router.route('/friend/send/:id').post(verifyJWT, sendFriendRequest);
-router.route('/friend/accept/:id').post(verifyJWT, acceptFriendRequest);
-router.route('/friend/reject/:id').post(verifyJWT, rejectFriendRequest);
-router.route('/friend/requests').get(verifyJWT, getFriendRequests);
-router.route('/friend/all').get(verifyJWT, getAllFriends);
+//Friend Related Route
+router.route("/friend/send/:id").post(verifyJWT, sendFriendRequest);
+router.route("/friend/accept/:id").post(verifyJWT, acceptFriendRequest);
+router.route("/friend/reject/:id").post(verifyJWT, rejectFriendRequest);
+router.route("/friend/requests").get(verifyJWT, getFriendRequests);
+router.route("/friend/all").get(verifyJWT, getAllFriends);
+
+//Opportunities/career related routes
+router.route("/career/add").post(verifyJWT, addOpportunity);
+router.route("/career/update/:id").patch(verifyJWT, updateOpportunity);
+router.route("/career/delete/:id").delete(verifyJWT, deleteOpportunity);
+router.route("/career/:id").get(verifyJWT, getOpportunityDetails);
+router.route("/career/all").get(verifyJWT, getAllOpportunities);
+router.route("/career/college/all").get(verifyJWT, getAllOpportunitiesOfCollege);
+
 export default router;
