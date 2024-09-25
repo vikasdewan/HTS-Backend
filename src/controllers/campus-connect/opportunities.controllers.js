@@ -1,4 +1,4 @@
-import CarrerModel from "../../models/campus-connect-models/career.model.js";
+import CarrerModel from "../../models/campus-connect-models/opportunities.model.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";

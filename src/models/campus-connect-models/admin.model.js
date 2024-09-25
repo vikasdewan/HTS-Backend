@@ -29,8 +29,8 @@ const adminSchema = new Schema(
   { timestamps: true }
 );
 
-export default AdminModel = model("AdminModel", adminSchema);
-
+const AdminModel = model("AdminModel", adminSchema);
+export default AdminModel;
 
 adminSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
