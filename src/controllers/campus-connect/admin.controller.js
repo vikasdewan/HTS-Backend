@@ -1,0 +1,225 @@
+import AdminModel from "../../models/campus-connect-models/admin.model.js";
+import UserModel from "../../models/campus-connect-models/user.model.js";
+import EventModel from "../../models/campus-connect-models/event.model.js";
+import { asyncHandler } from "../../utils/asyncHandler.js";
+import { ApiError } from "../../utils/ApiError.js";
+import { ApiResponse } from "../../utils/ApiResponse.js";
+
+// Cookie options for secure cookies
+const options = {
+  httpOnly: true,
+  secure: true,
+};
+
+// ####################### ADMIN AUTH CONTROLLERS ####################### //
+
+// Register Admin
+const registerAdmin = asyncHandler(async (req, res) => {
+  const { name, email, password, college } = req.body;
+
+  if (!(name && email && password && college)) {
+    throw new ApiError(400, "All fields are required");
+  }
+
+  const existingAdmin = await AdminModel.findOne({ email });
+  if (existingAdmin) {
+    throw new ApiError(409, "Admin with this email already exists");
+  }
+
+  const admin = await AdminModel.create({ name, email, password, college });
+  const newAdmin = await AdminModel.findById(admin._id).select("-password");
+
+  return res.status(201).json(new ApiResponse(201, { newAdmin }, "Admin registered successfully"));
+});
+
+// Login Admin
+const loginAdmin = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!(email && password)) {
+    throw new ApiError(400, "Email and password are required");
+  }
+
+  const admin = await AdminModel.findOne({ email });
+  if (!admin) {
+    throw new ApiError(404, "Admin not found");
+  }
+
+  const isPasswordValid = await admin.isPasswordCorrect(password);
+  if (!isPasswordValid) {
+    throw new ApiError(401, "Invalid credentials");
+  }
+
+  const accessToken = admin.genrateAccessToken();
+  const loggedInAdmin = await AdminModel.findById(admin._id).select("-password");
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .json(new ApiResponse(200, { loggedInAdmin, accessToken }, "Admin logged in successfully"));
+});
+
+// Logout Admin
+const logoutAdmin = asyncHandler(async (req, res) => {
+  return res.status(200).clearCookie("accessToken", options).json(new ApiResponse(200, "Admin logged out successfully"));
+});
+
+// ####################### ADMIN PROFILE CONTROLLERS ####################### //
+
+// Get Admin Profile
+const getAdminProfile = asyncHandler(async (req, res) => {
+  const admin = await AdminModel.findById(req.admin?._id);
+  return res.status(200).json(new ApiResponse(200, { admin }, "Admin profile fetched successfully"));
+});
+
+// Update Admin Details
+const updateAdminDetails = asyncHandler(async (req, res) => {
+  const { name, email, college } = req.body;
+
+  if (!(name && email && college)) {
+    throw new ApiError(400, "All fields must be filled");
+  }
+
+  const updatedAdmin = await AdminModel.findByIdAndUpdate(
+    req.admin?._id,
+    { $set: { name, email, college } },
+    { new: true }
+  ).select("-password");
+
+  return res.status(200).json(new ApiResponse(200, { updatedAdmin }, "Admin details updated successfully"));
+});
+
+// Change Admin Password
+const changeAdminPassword = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+
+  const admin = await AdminModel.findById(req.admin?._id);
+  const isPasswordCorrect = await admin.isPasswordCorrect(oldPassword);
+
+  if (!isPasswordCorrect) {
+    throw new ApiError(401, "Old password is incorrect");
+  }
+
+  admin.password = newPassword;
+  await admin.save({ validateBeforeSave: false });
+
+  return res.status(200).json(new ApiResponse(200, {}, "Password changed successfully"));
+});
+
+// ####################### ADMIN ACTIONS CONTROLLERS ####################### //
+
+// Validate Event Organizer
+const validateEventOrganizer = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  user.isEventOrganizer = true;
+  await user.save();
+
+  return res.status(200).json(new ApiResponse(200, { user }, "User validated as event organizer"));
+});
+
+// Verify User
+const verifyUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  user.isVerified = true;
+  await user.save();
+
+  return res.status(200).json(new ApiResponse(200, { user }, "User verified successfully"));
+});
+
+// Block User
+const blockUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await UserModel.findByIdAndUpdate(userId, { isBlocked: true }, { new: true });
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return res.status(200).json(new ApiResponse(200, { user }, "User blocked successfully"));
+});
+
+// Unblock User
+const unblockUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await UserModel.findByIdAndUpdate(userId, { isBlocked: false }, { new: true });
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return res.status(200).json(new ApiResponse(200, { user }, "User unblocked successfully"));
+});
+
+// Get All Users
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await UserModel.find();
+  return res.status(200).json(new ApiResponse(200, { users }, "All users fetched successfully"));
+});
+
+// Get Users By College
+const getUsersByCollege = asyncHandler(async (req, res) => {
+  const admin = await AdminModel.findById(req.admin._id).select("college");
+  const users = await UserModel.find({ college: admin.college });
+
+  if (!users.length) {
+    throw new ApiError(404, "No users found from the same college");
+  }
+
+  return res.status(200).json(new ApiResponse(200, { users }, "Users from the same college fetched successfully"));
+});
+
+// Delete Event
+const deleteEvent = asyncHandler(async (req, res) => {
+  const { eventId } = req.params;
+
+  const event = await EventModel.findByIdAndDelete(eventId);
+  if (!event) {
+    throw new ApiError(404, "Event not found");
+  }
+
+  return res.status(200).json(new ApiResponse(200, {}, "Event deleted successfully"));
+});
+
+// Handle User Reports
+const handleUserReports = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  user.isReported = true;
+  await user.save();
+
+  return res.status(200).json(new ApiResponse(200, { user }, "User reported status updated successfully"));
+});
+
+export {
+  registerAdmin,
+  loginAdmin,
+  logoutAdmin,
+  getAdminProfile,
+  updateAdminDetails,
+  changeAdminPassword,
+  validateEventOrganizer,
+  verifyUser,
+  blockUser,
+  unblockUser,
+  getAllUsers,
+  getUsersByCollege,
+  deleteEvent,
+  handleUserReports,
+};
