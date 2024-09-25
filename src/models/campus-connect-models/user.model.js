@@ -19,17 +19,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       unique: true,
       required: true,
-      validate:[validator.isEmail,"Provide a valid email"]
+      validate: [validator.isEmail, "Provide a valid email"],
     },
     rollnum: {
       type: Number,
       unique: true,
       required: true,
     },
-    password:{
-      type:String,
-      required:true,
-      minLength:[8,"Password Should be at least 8 marks"]
+    password: {
+      type: String,
+      required: true,
+      minLength: [8, "Password Should be at least 8 marks"],
     },
     college: {
       type: String,
@@ -46,11 +46,11 @@ const userSchema = new mongoose.Schema(
     year: {
       type: Number,
       required: true,
-      enum:[1,2,3,4]
+      enum: [1, 2, 3, 4],
     },
     bio: {
       type: String,
-      minLength: [30,"Bio length atleast contain 30 characters"],
+      minLength: [30, "Bio length atleast contain 30 characters"],
     },
     interests: {
       type: [String],
@@ -58,27 +58,31 @@ const userSchema = new mongoose.Schema(
     profileImage: {
       type: String,
     },
-    isEventOrganizer:{
-      type:Boolean,
-      default:false
+    isEventOrganizer: {
+      type: Boolean,
+      default: false,
     },
     isBlocked: {
       type: Boolean,
       default: false,
     },
+    isAppliedForEventOrganizer: {
+      type: Boolean,
+      default: false,
+    }, 
     // Friend relationships
-     friends: [
+    friends: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'UserModel', // Reference to another User document
-      }
+        ref: "UserModel", // Reference to another User document
+      },
     ],
     // Friend requests - Array of user IDs for pending requests
     friendRequests: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'UserModel', // User who sent the request
-      }
+        ref: "UserModel", // User who sent the request
+      },
     ],
   },
   { timestamps: true }
@@ -110,8 +114,6 @@ userSchema.methods.genrateAccessToken = function () {
     }
   );
 };
-
-
 
 const UserModel = mongoose.model("User Details", userSchema);
 export default UserModel;

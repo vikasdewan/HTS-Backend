@@ -255,6 +255,25 @@ const updateProfileImage = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, user, "avatar changes successfully"));
 });
 
+// User applies to be an event organizer
+const applyForEventOrganizer = asyncHandler(async (req, res) => {
+  const userId = req.user?._id; // Get the current user's ID
+
+  // Check if the user has already applied
+  const user = await UserModel.findById(userId);
+  if (user.isAppliedForEventOrganizer) {
+    throw new ApiError(400, "You have already applied to be an event organizer.");
+  }
+
+  // Update the user's isAppliedForEventOrganizer status to true
+  user.isAppliedForEventOrganizer = true;
+  await user.save({ validateBeforeSave: false });
+
+  return res.status(200).json(
+    new ApiResponse(200, { user }, "Application to be an event organizer submitted successfully")
+  );
+});
+
 export {
   registerUser,
   loginUser,
@@ -264,5 +283,6 @@ export {
   getAllUser,
   updateAccountDetails,
   updateProfileImage,
-  getAllUserOfCollage
+  getAllUserOfCollage,
+  applyForEventOrganizer
 };

@@ -29,7 +29,9 @@ const registerAdmin = asyncHandler(async (req, res) => {
   const admin = await AdminModel.create({ name, email, password, college });
   const newAdmin = await AdminModel.findById(admin._id).select("-password");
 
-  return res.status(201).json(new ApiResponse(201, { newAdmin }, "Admin registered successfully"));
+  return res
+    .status(201)
+    .json(new ApiResponse(201, { newAdmin }, "Admin registered successfully"));
 });
 
 // Login Admin
@@ -51,17 +53,28 @@ const loginAdmin = asyncHandler(async (req, res) => {
   }
 
   const accessToken = admin.genrateAccessToken();
-  const loggedInAdmin = await AdminModel.findById(admin._id).select("-password");
+  const loggedInAdmin = await AdminModel.findById(admin._id).select(
+    "-password"
+  );
 
   return res
     .status(200)
     .cookie("accessToken", accessToken, options)
-    .json(new ApiResponse(200, { loggedInAdmin, accessToken }, "Admin logged in successfully"));
+    .json(
+      new ApiResponse(
+        200,
+        { loggedInAdmin, accessToken },
+        "Admin logged in successfully"
+      )
+    );
 });
 
 // Logout Admin
 const logoutAdmin = asyncHandler(async (req, res) => {
-  return res.status(200).clearCookie("accessToken", options).json(new ApiResponse(200, "Admin logged out successfully"));
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .json(new ApiResponse(200, "Admin logged out successfully"));
 });
 
 // ####################### ADMIN PROFILE CONTROLLERS ####################### //
@@ -69,7 +82,11 @@ const logoutAdmin = asyncHandler(async (req, res) => {
 // Get Admin Profile
 const getAdminProfile = asyncHandler(async (req, res) => {
   const admin = await AdminModel.findById(req.admin?._id);
-  return res.status(200).json(new ApiResponse(200, { admin }, "Admin profile fetched successfully"));
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, { admin }, "Admin profile fetched successfully")
+    );
 });
 
 // Update Admin Details
@@ -86,7 +103,15 @@ const updateAdminDetails = asyncHandler(async (req, res) => {
     { new: true }
   ).select("-password");
 
-  return res.status(200).json(new ApiResponse(200, { updatedAdmin }, "Admin details updated successfully"));
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { updatedAdmin },
+        "Admin details updated successfully"
+      )
+    );
 });
 
 // Change Admin Password
@@ -103,69 +128,109 @@ const changeAdminPassword = asyncHandler(async (req, res) => {
   admin.password = newPassword;
   await admin.save({ validateBeforeSave: false });
 
-  return res.status(200).json(new ApiResponse(200, {}, "Password changed successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password changed successfully"));
 });
 
 // ####################### ADMIN ACTIONS CONTROLLERS ####################### //
 
-// Validate Event Organizer
-const validateEventOrganizer = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+// Get all users who applied to be event organizers
+const getEventOrganizerApplications = asyncHandler(async (req, res) => {
+  const applications = await UserModel.find({
+    isAppliedForEventOrganizer: true,
+  }).select("-password");
 
-  const user = await UserModel.findById(userId);
-  if (!user) {
-    throw new ApiError(404, "User not found");
-  }
-
-  user.isEventOrganizer = true;
-  await user.save();
-
-  return res.status(200).json(new ApiResponse(200, { user }, "User validated as event organizer"));
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { applications },
+        "Event organizer applications fetched successfully"
+      )
+    );
 });
 
-// Verify User
-const verifyUser = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+// Approve an application
+const approveApplication = asyncHandler(async (req, res) => {
+  const { userId } = req.params; // Get user ID from URL
 
   const user = await UserModel.findById(userId);
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
-  user.isVerified = true;
-  await user.save();
+  // Update user's role to event organizer
+  user.isEventOrganizer = true;
+  user.isAppliedForEventOrganizer = false; // Reset application status
+  await user.save({ validateBeforeSave: false });
 
-  return res.status(200).json(new ApiResponse(200, { user }, "User verified successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user }, "Application approved successfully"));
+});
+
+// Reject an application
+const rejectApplication = asyncHandler(async (req, res) => {
+  const { userId } = req.params; // Get user ID from URL
+
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  // Reset application status without making the user an event organizer
+  user.isAppliedForEventOrganizer = false;
+  await user.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user }, "Application rejected successfully"));
 });
 
 // Block User
 const blockUser = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
-  const user = await UserModel.findByIdAndUpdate(userId, { isBlocked: true }, { new: true });
+  const user = await UserModel.findByIdAndUpdate(
+    userId,
+    { isBlocked: true },
+    { new: true }
+  );
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
-  return res.status(200).json(new ApiResponse(200, { user }, "User blocked successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user }, "User blocked successfully"));
 });
 
 // Unblock User
 const unblockUser = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
-  const user = await UserModel.findByIdAndUpdate(userId, { isBlocked: false }, { new: true });
+  const user = await UserModel.findByIdAndUpdate(
+    userId,
+    { isBlocked: false },
+    { new: true }
+  );
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
-  return res.status(200).json(new ApiResponse(200, { user }, "User unblocked successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user }, "User unblocked successfully"));
 });
 
 // Get All Users
 const getAllUsers = asyncHandler(async (req, res) => {
   const users = await UserModel.find();
-  return res.status(200).json(new ApiResponse(200, { users }, "All users fetched successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { users }, "All users fetched successfully"));
 });
 
 // Get Users By College
@@ -177,7 +242,15 @@ const getUsersByCollege = asyncHandler(async (req, res) => {
     throw new ApiError(404, "No users found from the same college");
   }
 
-  return res.status(200).json(new ApiResponse(200, { users }, "Users from the same college fetched successfully"));
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { users },
+        "Users from the same college fetched successfully"
+      )
+    );
 });
 
 // Delete Event
@@ -189,7 +262,9 @@ const deleteEvent = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Event not found");
   }
 
-  return res.status(200).json(new ApiResponse(200, {}, "Event deleted successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Event deleted successfully"));
 });
 
 // Handle User Reports
@@ -204,7 +279,15 @@ const handleUserReports = asyncHandler(async (req, res) => {
   user.isReported = true;
   await user.save();
 
-  return res.status(200).json(new ApiResponse(200, { user }, "User reported status updated successfully"));
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { user },
+        "User reported status updated successfully"
+      )
+    );
 });
 
 export {
@@ -214,8 +297,9 @@ export {
   getAdminProfile,
   updateAdminDetails,
   changeAdminPassword,
-  validateEventOrganizer,
-  verifyUser,
+  getEventOrganizerApplications,
+  approveApplication,
+  rejectApplication,
   blockUser,
   unblockUser,
   getAllUsers,
