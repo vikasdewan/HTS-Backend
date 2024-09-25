@@ -58,6 +58,17 @@ const updateEvent = asyncHandler(async (req, res) => {
   if (!event) {
     throw new ApiError(404, "No Such Event Found || Wrong Event Id");
   }
+  const userId = req.user?._id;
+  if (!userId) {
+    throw new ApiError(404, "User Id Not Found ");
+  }
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User Not Found");
+  }
+  if(!user.isEventOrganizer){
+    throw new ApiError(400,"Only Event Organizer Can Update Event");
+  }
   const updatedEvent = await EventModel.findByIdAndUpdate(id, req.body, {
     new: true,
     runValidators: true,
@@ -77,6 +88,17 @@ const deleteEvent = asyncHandler(async (req, res) => {
   const event = await EventModel.findById(id);
   if (!event) {
     throw new ApiError(404, "No Such Event Found || Wrong Event Id");
+  }
+  const userId = req.user?._id;
+  if (!userId) {
+    throw new ApiError(404, "User Id Not Found ");
+  }
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User Not Found");
+  }
+  if(!user.isEventOrganizer){
+    throw new ApiError(400,"Only Event Organizer Can delete Event");
   }
   const deletedEvent = await EventModel.findByIdAndDelete(id, {
     new: true,
