@@ -59,7 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "Username or Email or Roll Number Already Exist");
   }
 
-  profileImageLocalPath = req.files?.profileImage[0]?.path;
+  const profileImageLocalPath = req.files?.profileImage[0]?.path;
   let profileImage;
   if (profileImageLocalPath) {
     profileImage = await uploadOnCloudinary(profileImageLocalPath);
@@ -84,7 +84,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     return res
       .status(201)
-      .json(new ApiResponse(201, newUser, "User Registered Successfully"));
+      .json(new ApiResponse(201, {newUser}, "User Registered Successfully"));
   } catch (error) {
     return res.status(500).json({ message: "Internal server error occured" });
   }
@@ -163,13 +163,40 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, { user }, "current user fetched successfully"));
 });
 
-//Get All User (for listing )
+//Get All User (for listing only not for use in website)
 const getAllUser = asyncHandler(async (req,res)=>{
   const users = await UserModel.find();
   return res
   .status(200)
   .json(new ApiResponse(201,{users},"All User Fetched Successfully"));
 })
+
+// Get All Users of Same College
+const getAllUserOfCollage = asyncHandler(async (req, res) => {
+  const userId = req.user?._id; // Get the current user's ID
+
+  if (!userId) {
+    throw new ApiError(404, "Student not found");
+  }
+
+  // Find the user by their ID and select only the college field
+  const user = await UserModel.findById(userId).select("college");
+
+  if (!user || !user.college) {
+    throw new ApiError(404, "College name not found for this student");
+  }
+
+  // Find all students from the same college
+  const collageStudents = await UserModel.find({ college: user.college });
+
+  if (!collageStudents || collageStudents.length === 0) {
+    throw new ApiError(400, "No students available from the same college");
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200, { collageStudents }, "All users fetched successfully")
+  );
+});
 
 //update user details
 const updateAccountDetails = asyncHandler(async (req, res) => {
@@ -199,7 +226,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(201, user, "Account Details Updated Successfully"));
+    .json(new ApiResponse(201, {user}, "Account Details Updated Successfully"));
 });
 
 //updating profile image
@@ -228,6 +255,25 @@ const updateProfileImage = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, user, "avatar changes successfully"));
 });
 
+// User applies to be an event organizer
+const applyForEventOrganizer = asyncHandler(async (req, res) => {
+  const userId = req.user?._id; // Get the current user's ID
+
+  // Check if the user has already applied
+  const user = await UserModel.findById(userId);
+  if (user.isAppliedForEventOrganizer) {
+    throw new ApiError(400, "You have already applied to be an event organizer.");
+  }
+
+  // Update the user's isAppliedForEventOrganizer status to true
+  user.isAppliedForEventOrganizer = true;
+  await user.save({ validateBeforeSave: false });
+
+  return res.status(200).json(
+    new ApiResponse(200, { user }, "Application to be an event organizer submitted successfully")
+  );
+});
+
 export {
   registerUser,
   loginUser,
@@ -237,4 +283,6 @@ export {
   getAllUser,
   updateAccountDetails,
   updateProfileImage,
+  getAllUserOfCollage,
+  applyForEventOrganizer
 };

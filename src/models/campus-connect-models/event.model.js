@@ -30,6 +30,13 @@ const eventSchema = new mongoose.Schema(
     applyLink: {
       type: String,
     },
+    poster:{
+      type:String,//cloudinary url
+    },
+    college:{
+      type:String,
+      required:true
+    }
   },
   { timestamps: true }
 );

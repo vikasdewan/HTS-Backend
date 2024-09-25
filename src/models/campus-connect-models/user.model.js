@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Schema } from "mongoose";
+import validator from "validator";
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -17,6 +19,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       unique: true,
       required: true,
+      validate: [validator.isEmail, "Provide a valid email"],
     },
     password: {
       type: String,
@@ -26,6 +29,15 @@ const userSchema = new mongoose.Schema(
     rollnum: {
       type: Number,
       unique: true,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      minLength: [8, "Password Should be at least 8 marks"],
+    },
+    college: {
+      type: String,
       required: true,
     },
     course: {
@@ -39,10 +51,11 @@ const userSchema = new mongoose.Schema(
     year: {
       type: Number,
       required: true,
+      enum: [1, 2, 3, 4],
     },
     bio: {
       type: String,
-      min: 30,
+      minLength: [30, "Bio length atleast contain 30 characters"],
     },
     interests: {
       type: [String],
@@ -50,6 +63,32 @@ const userSchema = new mongoose.Schema(
     profileImage: {
       type: String,
     },
+    isEventOrganizer: {
+      type: Boolean,
+      default: false,
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
+    isAppliedForEventOrganizer: {
+      type: Boolean,
+      default: false,
+    }, 
+    // Friend relationships
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "UserModel", // Reference to another User document
+      },
+    ],
+    // Friend requests - Array of user IDs for pending requests
+    friendRequests: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "UserModel", // User who sent the request
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -72,7 +111,6 @@ userSchema.methods.genrateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
-      userId: this.userId,
       name: this.name,
     },
     process.env.ACCESS_TOKEN_SECRET,
@@ -81,8 +119,6 @@ userSchema.methods.genrateAccessToken = function () {
     }
   );
 };
-
-
 
 const UserModel = mongoose.model("User Details", userSchema);
 export default UserModel;
