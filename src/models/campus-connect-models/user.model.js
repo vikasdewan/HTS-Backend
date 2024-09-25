@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    password: {
+      type: String,
+      required: true,
+      minLength: [8, "Password Should be at least 8 marks"],
+    },
     rollnum: {
       type: Number,
       unique: true,
