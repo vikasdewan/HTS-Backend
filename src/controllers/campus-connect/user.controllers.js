@@ -8,8 +8,6 @@ const genratingAccessToken = async (userId) => {
   try {
     const user = await UserModel.findById(userId);
     const accessToken = user.genrateAccessToken();
-
-    user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
 
     return { accessToken };
@@ -35,6 +33,7 @@ const registerUser = asyncHandler(async (req, res) => {
     course,
     branch_section,
     year,
+    college
   } = req.body;
   //check for data availability
   if (
@@ -46,7 +45,7 @@ const registerUser = asyncHandler(async (req, res) => {
       course &&
       branch_section &&
       year &&
-      password
+      password&&college
     )
   ) {
     throw new ApiError(404, "All Fields are required for registration");
@@ -74,6 +73,7 @@ const registerUser = asyncHandler(async (req, res) => {
       branch_section,
       year,
       password,
+      college,
       profileImage: profileImage?.secure_url || "",
     });
 
