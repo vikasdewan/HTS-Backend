@@ -69,19 +69,19 @@ const userSchema = new mongoose.Schema(
     isAppliedForEventOrganizer: {
       type: Boolean,
       default: false,
-    }, 
+    },
     // Friend relationships
     friends: [
       {
         type: Schema.Types.ObjectId,
-        ref: "UserModel", // Reference to another User document
+        ref: "Users", // Reference to another User document
       },
     ],
     // Friend requests - Array of user IDs for pending requests
     friendRequests: [
       {
         type: Schema.Types.ObjectId,
-        ref: "UserModel", // User who sent the request
+        ref: "Users", // User who sent the request
       },
     ],
   },
@@ -115,5 +115,5 @@ userSchema.methods.genrateAccessToken = function () {
   );
 };
 
-const UserModel = mongoose.model("User Details", userSchema);
+const UserModel = mongoose.model("Users", userSchema);
 export default UserModel;

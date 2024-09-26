@@ -20,12 +20,12 @@ const productSchema = new mongoose.Schema(
     },
     sellerId: {
       type: Schema.Types.ObjectId,
-      ref: "UserModel",
+      ref: "Users",
       required: true,
     },
     buyerId: {
       type: Schema.Types.ObjectId,
-      ref: "UserModel",
+      ref: "Users",
     },
     images: {
       type: [String],
@@ -39,5 +39,5 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const ProductsModel = mongoose.model("Product Details", productSchema);
+const ProductsModel = mongoose.model("Products", productSchema);
 export default ProductsModel;

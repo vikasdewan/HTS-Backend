@@ -12,7 +12,7 @@ const discussionSchema = new mongoose.Schema(
     },
     messages: {
       type: Schema.Types.ObjectId,
-      ref: "MessageModel",
+      ref: "Message",
       required: true,
     },
     createdBy: {
