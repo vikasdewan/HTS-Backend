@@ -58,7 +58,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "Username or Email or Roll Number Already Exist");
   }
 
-  const profileImageLocalPath = req.files?.profileImage[0]?.path;
+  const profileImageLocalPath = req.file?.path;
   let profileImage;
   if (profileImageLocalPath) {
     profileImage = await uploadOnCloudinary(profileImageLocalPath);

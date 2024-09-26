@@ -22,12 +22,12 @@ const addEvent = asyncHandler(async (req, res) => {
   if(!user.isEventOrganizer){
     throw new ApiError(404,"Only Event Organizer Can add Event");
   }
-  const posterLocalPath = req.files?.poster[0]?.path;
+  const posterLocalPath = req.file?.path;
   let poster;
   if (posterLocalPath) {
     poster = await uploadOnCloudinary(posterLocalPath);
   }
-
+  console.log("poster :  ",poster)
   const event = await EventModel.create({
     title,
     location,
