@@ -51,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(404, "All Fields are required for registration");
   }
   //check for existing user
-  const existedUser = await User.findOne({
+  const existedUser = await UserModel.findOne({
     $or: [{ username }, { email }, { rollnum }],
   });
   if (existedUser) {
