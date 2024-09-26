@@ -24,19 +24,19 @@ const eventSchema = new mongoose.Schema(
     },
     postedBy: {
       type: Schema.Types.ObjectId,
-      ref: "UserModel",
+      ref: "Users",
       required: true,
     },
     applyLink: {
       type: String,
     },
-    poster:{
-      type:String,//cloudinary url
+    poster: {
+      type: String, //cloudinary url
     },
-    college:{
-      type:String,
-      required:true
-    }
+    college: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

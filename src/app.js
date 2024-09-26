@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import campusConnectRouter from "./routes/campus-connect.route.js";
 import campusStoreRouter from "./routes/campus-store.route.js";
 import campusEatRouter from "./routes/campus-eat.route.js";
+import chatRouter from "./routes/chat.route.js";
 
 const app = express();
 
@@ -29,5 +30,7 @@ app.use("/api/v1/campus-store", campusStoreRouter);
 
 // campus eat routes
 app.use("/api/v1/campus-eat", campusEatRouter);
+
+app.use("/api/v1/chat", chatRouter);
 
 export { app };

@@ -10,10 +10,10 @@ const careerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    category:{
-        type:String,
-        required:[true,"Please enter job type "],
-        enum:["Remote","OnSite"],
+    category: {
+      type: String,
+      required: [true, "Please enter job type "],
+      enum: ["Remote", "OnSite"],
     },
     location: {
       type: String,
@@ -27,25 +27,25 @@ const careerSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    postedOn:{
-        type:Date,
-        default:Date.now()
+    postedOn: {
+      type: Date,
+      default: Date.now(),
     },
     postedBy: {
       type: Schema.Types.ObjectId,
-      ref: "UserModel",
+      ref: "Users",
       required: true,
     },
     applyLink: {
       type: String,
     },
-    college:{
-      type:String,
-      required:true
-    }
+    college: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-const CarrerModel = mongoose.model("Carrer Details", careerSchema);
+const CarrerModel = mongoose.model("CarrerDetails", careerSchema);
 export default CarrerModel;

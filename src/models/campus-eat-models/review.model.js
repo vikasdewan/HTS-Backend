@@ -12,7 +12,6 @@ import mongoose from "mongoose";
 
 const reviewSchema = new mongoose.Schema(
   {
-   
     foodItem: {
       type: String,
       required: true,
@@ -37,6 +36,6 @@ const reviewSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const ReviewModel = mongoose.model("Review Details", reviewSchema);
+const ReviewModel = mongoose.model("ReviewDetails", reviewSchema);
 
 export default ReviewModel;
