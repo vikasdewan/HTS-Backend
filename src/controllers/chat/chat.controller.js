@@ -1,5 +1,5 @@
-import ChatModel from "../../models/chat.model.js";
-import UserModel from "../../models/user.model.js";
+import ChatModel from "../../models/chats.model/chat.model.js";
+import UserModel from "../../models/campus-connect-models/user.model.js";
 
 export async function accessChat(req, res) {
   const { user_id } = await req.body;
