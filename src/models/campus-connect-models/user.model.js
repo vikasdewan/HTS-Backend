@@ -69,7 +69,7 @@ const userSchema = new mongoose.Schema(
     isAppliedForEventOrganizer: {
       type: Boolean,
       default: false,
-    }, 
+    },
     // Friend relationships
     friends: [
       {
@@ -115,5 +115,5 @@ userSchema.methods.genrateAccessToken = function () {
   );
 };
 
-const UserModel = mongoose.model("User Details", userSchema);
+const UserModel = mongoose.model("Users", userSchema);
 export default UserModel;
