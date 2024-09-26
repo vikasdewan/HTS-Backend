@@ -74,14 +74,14 @@ const userSchema = new mongoose.Schema(
     friends: [
       {
         type: Schema.Types.ObjectId,
-        ref: "UserModel", // Reference to another User document
+        ref: "Users", // Reference to another User document
       },
     ],
     // Friend requests - Array of user IDs for pending requests
     friendRequests: [
       {
         type: Schema.Types.ObjectId,
-        ref: "UserModel", // User who sent the request
+        ref: "Users", // User who sent the request
       },
     ],
   },

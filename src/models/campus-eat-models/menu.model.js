@@ -24,6 +24,6 @@ const menuSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const MenuModel = mongoose.model("Menu Details", menuSchema);
+const MenuModel = mongoose.model("MenuDetails", menuSchema);
 
 export default MenuModel;

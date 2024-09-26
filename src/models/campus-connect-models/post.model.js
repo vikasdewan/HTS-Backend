@@ -9,7 +9,7 @@ const postSchema = new mongoose.Schema(
     },
     postedBy: {
       type: Schema.Types.ObjectId,
-      ref: "UserModel",
+      ref: "Users",
       required: true,
     },
     college: {
@@ -19,7 +19,7 @@ const postSchema = new mongoose.Schema(
     likes: [
       {
         type: Schema.Types.ObjectId,
-        ref: "UserModel",
+        ref: "Users",
       },
     ],
     comments: [
@@ -30,7 +30,7 @@ const postSchema = new mongoose.Schema(
         },
         commentedBy: {
           type: Schema.Types.ObjectId,
-          ref: "UserModel",
+          ref: "Users",
           required: true,
         },
         commentedAt: {
@@ -40,11 +40,11 @@ const postSchema = new mongoose.Schema(
       },
     ],
     postImage: {
-      type: String, // Cloudinary URL 
+      type: String, // Cloudinary URL
     },
   },
   { timestamps: true }
 );
 
-const PostModel = mongoose.model("Post Details", postSchema);
+const PostModel = mongoose.model("PostDetails", postSchema);
 export default PostModel;

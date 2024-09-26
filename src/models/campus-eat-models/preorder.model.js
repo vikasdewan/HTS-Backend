@@ -5,7 +5,7 @@ const preorderSchema = new mongoose.Schema(
   {
     orderedBy: {
       type: Schema.Types.ObjectId,
-      ref: "UserModel",
+      ref: "Users",
       required: true,
     },
     canteenId: {
@@ -32,6 +32,6 @@ const preorderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const PreorderModel = mongoose.model("Preorder Details", preorderSchema);
+const PreorderModel = mongoose.model("PreorderDetails", preorderSchema);
 
 export default PreorderModel;

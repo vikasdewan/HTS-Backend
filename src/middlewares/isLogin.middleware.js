@@ -9,7 +9,8 @@ export const verifyJWT = (entity = "user") =>
   asyncHandler(async (req, _, next) => {
     try {
       const token =
-        req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+        req.cookies?.accessToken ||
+        req.header("Authorization")?.replace("Bearer ", "");
 
       if (!token) {
         throw new ApiError(401, "Unauthorized request");
@@ -21,15 +22,25 @@ export const verifyJWT = (entity = "user") =>
       // Determine if we're verifying an admin or a user
       let authenticatedEntity;
       if (entity === "admin") {
-        authenticatedEntity = await AdminModel.findById(decodedToken?._id).select("-password");
+        authenticatedEntity = await AdminModel.findById(
+          decodedToken?._id
+        ).select("-password");
         if (!authenticatedEntity) {
-          throw new ApiError(401, "Unauthorized request - Invalid Admin Access Token");
+          throw new ApiError(
+            401,
+            "Unauthorized request - Invalid Admin Access Token"
+          );
         }
         req.admin = authenticatedEntity; // Attach the admin to the request
       } else {
-        authenticatedEntity = await UserModel.findById(decodedToken?._id).select("-password");
+        authenticatedEntity = await UserModel.findById(
+          decodedToken?._id
+        ).select("-password");
         if (!authenticatedEntity) {
-          throw new ApiError(401, "Unauthorized request - Invalid User Access Token");
+          throw new ApiError(
+            401,
+            "Unauthorized request - Invalid User Access Token"
+          );
         }
         req.user = authenticatedEntity; // Attach the user to the request
       }
