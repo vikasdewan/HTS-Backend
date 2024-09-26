@@ -29,21 +29,20 @@ const adminSchema = new Schema(
   { timestamps: true }
 );
 
-const AdminModel = model("AdminModel", adminSchema);
-export default AdminModel;
+
 
 adminSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) return next();
-    this.password = await bcrypt.hash(this.password, 10); //10 is a round's of hashing
-    console.log("this.password at presave ", this.password);
-    next();
-  });
-  
-  //user defined method in schema like this ...
-  adminSchema.methods.isPasswordCorrect = async function (password) {
-    return await bcrypt.compare(password, this.password); //password by user and this.password
-    //refers to the password which is saved in the jsonwebtoken
-  };
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 10); //10 is a round's of hashing
+  console.log("this.password at presave ", this.password);
+  next();
+});
+
+//user defined method in schema like this ...
+adminSchema.methods.isPasswordCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password); //password by user and this.password
+  //refers to the password which is saved in the jsonwebtoken
+};
   //jwt - json web token
   adminSchema.methods.genrateAccessToken = function () {
     //how many things to be saved as a jwt here used as access token
@@ -58,3 +57,5 @@ adminSchema.pre("save", async function (next) {
       }
     );
   };
+  const AdminModel = model("AdminModel", adminSchema);
+  export default AdminModel;

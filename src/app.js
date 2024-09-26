@@ -5,6 +5,7 @@ import campusConnectRouter from "./routes/campus-connect.route.js";
 import campusStoreRouter from "./routes/campus-store.route.js";
 import campusEatRouter from "./routes/campus-eat.route.js";
 import chatRouter from "./routes/chat.route.js";
+import adminRouter from './routes/admin.routes.js'
 
 const app = express();
 
@@ -24,7 +25,7 @@ app.use(cookieParser());
 
 // campus connect routes
 app.use("/api/v1/campus-connect", campusConnectRouter);
-
+app.use("/api/v1/campus-connect/admin",adminRouter);
 // campus store routes
 app.use("/api/v1/campus-store", campusStoreRouter);
 
