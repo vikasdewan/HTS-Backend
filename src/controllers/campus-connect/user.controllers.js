@@ -207,12 +207,12 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
   ) {
     throw new ApiError(400, "Fields Cannot be empty");
   }
-
+  const userId = req.user?._id;
   const user = await UserModel.findByIdAndUpdate(
-    req.user?._id,
+     userId,
     {
       $set: {
-        nameame,
+        name,
         email,
         course,
         branch_section,
