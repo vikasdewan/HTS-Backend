@@ -1,6 +1,15 @@
 import express from "express";
-const router = express.Router();
+import {
+  fetchAllChats,
+  accessChat,
+  createGroupChat,
+  renameGroupChat,
+  kickFromGroup,
+  addUserToGroup,
+} from "../controllers/chat/chat.controller.js";
 import { verifyJWT } from "../middlewares/isLogin.middleware.js";
+
+const router = express.Router();
 
 router.get("/", verifyJWT, fetchAllChats);
 router.post("/", verifyJWT, accessChat);
