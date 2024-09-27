@@ -142,6 +142,29 @@ const getAllOpportunitiesOfCollege = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, { opportunities }, "All career opportunities for your college fetched successfully"));
 });
+// Get Career Opportunities of a College
+const getMyOpportunities = asyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+  if (!userId) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const opportunities = await CarrerModel.find({ postedBy: userId });
+  if (!opportunities || opportunities.length === 0) {
+    throw new ApiError(404, "No opportunities available for your college");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { opportunities }, "All career opportunities for your college fetched successfully"));
+});
+
+
 
 export {
   addOpportunity,
@@ -150,4 +173,5 @@ export {
   getOpportunityDetails,
   getAllOpportunities,
   getAllOpportunitiesOfCollege,
+  getMyOpportunities
 };

@@ -45,6 +45,7 @@ import {
   getOpportunityDetails,
   getAllOpportunities,
   getAllOpportunitiesOfCollege,
+  getMyOpportunities
 } from "../controllers/campus-connect/opportunities.controllers.js";
 
 //Post Controllers 
@@ -98,6 +99,7 @@ router.route("/career/update/:id").patch(verifyJWT, updateOpportunity);
 router.route("/career/delete/:id").delete(verifyJWT, deleteOpportunity);
 router.route("/career/all").get(verifyJWT, getAllOpportunities);
 router.route("/career/college/all").get(verifyJWT, getAllOpportunitiesOfCollege);
+router.route("/career/my").get(verifyJWT, getMyOpportunities);
 router.route("/career/:id").get(verifyJWT, getOpportunityDetails);
 
 //Post Related Routes
