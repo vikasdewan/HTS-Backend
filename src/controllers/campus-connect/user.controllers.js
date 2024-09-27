@@ -8,8 +8,6 @@ const genratingAccessToken = async (userId) => {
   try {
     const user = await UserModel.findById(userId);
     const accessToken = user.genrateAccessToken();
-
-    user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
 
     return { accessToken };
@@ -36,7 +34,12 @@ const registerUser = asyncHandler(async (req, res) => {
     course,
     branch_section,
     year,
+<<<<<<< HEAD
   } = await req.body;
+=======
+    college
+  } = req.body;
+>>>>>>> cdfc03e5c2ceb3f5cfca356db9a1002b55a6cf05
   //check for data availability
   if (
     !(
@@ -48,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
       course &&
       branch_section &&
       year &&
-      password
+      password&&college
     )
   ) {
     throw new ApiError(404, "All Fields are required for registration");
@@ -61,7 +64,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "Username or Email or Roll Number Already Exist");
   }
 
-  const profileImageLocalPath = req.files?.profileImage[0]?.path;
+  const profileImageLocalPath = req.file?.path;
   let profileImage;
   if (profileImageLocalPath) {
     profileImage = await uploadOnCloudinary(profileImageLocalPath);
@@ -77,6 +80,7 @@ const registerUser = asyncHandler(async (req, res) => {
       branch_section,
       year,
       password,
+      college,
       profileImage: profileImage?.secure_url || "",
     });
 
@@ -210,12 +214,12 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
   ) {
     throw new ApiError(400, "Fields Cannot be empty");
   }
-
+  const userId = req.user?._id;
   const user = await UserModel.findByIdAndUpdate(
-    req.user?._id,
+     userId,
     {
       $set: {
-        nameame,
+        name,
         email,
         course,
         branch_section,
