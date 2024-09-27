@@ -4,12 +4,9 @@ import jwt from "jsonwebtoken";
 import UserModel from "../models/campus-connect-models/user.model.js";
 import AdminModel from "../models/campus-connect-models/admin.model.js";
 
-// Middleware to verify both users and admins
-//User Defined Middleware
-
 export const verifyJWT = asyncHandler(async (req,_,next)=>{
    try {
-    const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","")
+    const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer","")
  
     if(!token){
      throw new ApiError(401,"Unauthorized request")

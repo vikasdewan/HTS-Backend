@@ -25,6 +25,10 @@ const adminSchema = new Schema(
       unique: true,
       required: true,
     },
+    isAdmin:{
+      type:Boolean,
+      default:true
+    }
   },
   { timestamps: true }
 );
