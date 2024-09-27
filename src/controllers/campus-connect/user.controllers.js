@@ -17,10 +17,11 @@ const genratingAccessToken = async (userId) => {
 };
 
 const options = {
-  httpOnly: true,
-  secure: true,
-};
-
+  expires: new Date(Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
+  httpOnly:true,
+  secure:true,
+  sameSite:'None'
+}
 //User Registration
 const registerUser = asyncHandler(async (req, res) => {
   //get data from user
