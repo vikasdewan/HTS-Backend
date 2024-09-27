@@ -100,7 +100,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
     .populate("comments.commentedBy", "name profileImage");
 
   if (!posts || posts.length === 0) {
-    throw new ApiError(404, "No posts available for your college");
+    new ApiResponse(404,null,"No posts available for your college");
   }
   const formattedPosts = posts.map((post) => ({
     _id: post._id,
