@@ -24,17 +24,12 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      minLength: [8, "Password Should be at least 8 marks"],
+      minLength: [8, "Password Should be at least 8 marks"],
     },
     rollnum: {
       type: Number,
       unique: true,
       required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      minLength: [8, "Password Should be at least 8 marks"],
     },
     college: {
       type: String,

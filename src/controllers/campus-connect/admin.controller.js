@@ -14,7 +14,7 @@ const options = {
 // ####################### ADMIN AUTH CONTROLLERS ####################### //
 
 // Register Admin
-const registerAdmin = asyncHandler(async (req, res) => {
+const  registerAdmin = asyncHandler(async (req, res) => {
   const { name, email, password, college } = req.body;
 
   if (!(name && email && password && college)) {

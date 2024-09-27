@@ -32,10 +32,11 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     rollnum,
     password,
+    college,
     course,
     branch_section,
     year,
-  } = req.body;
+  } = await req.body;
   //check for data availability
   if (
     !(
@@ -43,6 +44,7 @@ const registerUser = asyncHandler(async (req, res) => {
       name &&
       email &&
       rollnum &&
+      college &&
       course &&
       branch_section &&
       year &&
@@ -52,7 +54,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(404, "All Fields are required for registration");
   }
   //check for existing user
-  const existedUser = await User.findOne({
+  const existedUser = await UserModel.findOne({
     $or: [{ username }, { email }, { rollnum }],
   });
   if (existedUser) {
@@ -70,6 +72,7 @@ const registerUser = asyncHandler(async (req, res) => {
       name,
       email,
       rollnum,
+      college,
       course,
       branch_section,
       year,
@@ -92,7 +95,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 //User Login
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, username, password, rollnum } = req.body;
+  const { email, username, password, rollnum } = await req.body;
 
   if (!(username || email || rollnum)) {
     throw new ApiError(400, "Enter username or email or Roll Number ");
