@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minLength: [8, "Password Should be at least 8 marks"],
-    },
+    },
     rollnum: {
       type: Number,
       unique: true,
@@ -81,6 +81,10 @@ const userSchema = new mongoose.Schema(
         ref: "Users", // Reference to another User document
       },
     ],
+    isAdmin: {
+      type: Boolean,
+      default:false
+    },
     // Friend requests - Array of user IDs for pending requests
     friendRequests: [
       {
