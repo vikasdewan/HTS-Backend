@@ -76,11 +76,11 @@ router.route("/user/report/:reportedUserId").post(verifyJWT,reportUser);
 
 //Event Related Route
 router.route("/event/add").post(verifyJWT, upload.single("poster"), addEvent);
-router.route("/event/update/:id").patch(verifyJWT, updateEvent);
-router.route("/event/delete/:id").delete(verifyJWT, deleteEvent);
 router.route("/event/all").get(verifyJWT, getAllEvents);
+router.route("/event/college").get(verifyJWT, getAllEventOfCollage);
 router.route("/event/:id").get(verifyJWT, getEventDetails);
-router.route("/event/all-collage").get(verifyJWT, getAllEventOfCollage);
+router.route("/event/delete/:id").delete(verifyJWT, deleteEvent);
+router.route("/event/update/:id").patch(verifyJWT, updateEvent);
 
 //Friend Related Route
 router.route("/friend/send/:id").post(verifyJWT, sendFriendRequest);
