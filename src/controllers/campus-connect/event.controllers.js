@@ -153,4 +153,24 @@ const getAllEventOfCollage = asyncHandler(async (req, res) => {
   .json(new ApiResponse(201,{events},"All Events are Fetched"));
 });
 
-export { addEvent, updateEvent, deleteEvent, getEventDetails, getAllEvents,getAllEventOfCollage };
+const getMyEvents= asyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+  if (!userId) {
+    throw new ApiError(404, "User Not Found");
+  }
+  const user = await UserModel.findById(userId);
+  if(!user){
+    throw new ApiError(404,"User Not Found");
+  }
+  const events = await EventModel.find({postedBy:userId});
+  if(!events){
+    throw new ApiError(404,"Event Not Available");
+  }
+
+  return res
+  .status(201)
+  .json(new ApiResponse(201,{events},"All Events are Fetched"));
+});
+
+
+export { addEvent, updateEvent,getMyEvents, deleteEvent, getEventDetails, getAllEvents,getAllEventOfCollage };

@@ -25,6 +25,7 @@ import {
   getAllEvents,
   getEventDetails,
   updateEvent,
+  getMyEvents
 } from "../controllers/campus-connect/event.controllers.js";
 
 //Friend Controllers import
@@ -79,6 +80,7 @@ router.route("/user/report/:reportedUserId").post(verifyJWT,reportUser);
 router.route("/event/add").post(verifyJWT, upload.single("poster"), addEvent);
 router.route("/event/all").get(verifyJWT, getAllEvents);
 router.route("/event/college").get(verifyJWT, getAllEventOfCollage);
+router.route("/event/my").get(verifyJWT, getMyEvents);
 router.route("/event/:id").get(verifyJWT, getEventDetails);
 router.route("/event/delete/:id").delete(verifyJWT, deleteEvent);
 router.route("/event/update/:id").patch(verifyJWT, updateEvent);
