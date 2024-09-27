@@ -15,7 +15,7 @@ import {
     getAllUsers,
     getUsersByCollege,
     deleteEvent,
-    handleUserReports,
+    getReportedUsersByCollege,
 } from "../controllers/campus-connect/admin.controller.js";
 
 const router = express.Router();
@@ -36,7 +36,7 @@ router.route("/user/unblock/:userId").post(verifyJWT, unblockUser);
 router.route("/users").get(verifyJWT, getAllUsers);
 router.route("/users/college").get(verifyJWT, getUsersByCollege);
 router.route("/event/delete/:eventId").delete(verifyJWT, deleteEvent);
-router.route("/user/reports/:userId").post(verifyJWT, handleUserReports);
+router.route("/reported-users/college").get(verifyJWT, getReportedUsersByCollege);
 
 // Event organizer application routes
 router.route("/event-organizer/applications").get(verifyJWT, getEventOrganizerApplications);

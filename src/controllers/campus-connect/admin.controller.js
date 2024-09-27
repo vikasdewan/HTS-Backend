@@ -268,26 +268,30 @@ const deleteEvent = asyncHandler(async (req, res) => {
 });
 
 // Handle User Reports
-const handleUserReports = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+// Admin: Get all reported users of the same college
+const getReportedUsersByCollege = asyncHandler(async (req, res) => {
+  // Get the current admin's college from the request (assuming the admin is authenticated and has the college field)
+  const adminCollege = req.admin?.college; 
 
-  const user = await UserModel.findById(userId);
-  if (!user) {
-    throw new ApiError(404, "User not found");
+  if (!adminCollege) {
+    throw new ApiError(404, "Admin's college not found");
   }
 
-  user.isReported = true;
-  await user.save();
+  // Find reported users that belong to the same college as the admin
+  const reportedUsers = await UserModel.find({
+    college: adminCollege,
+    reportCount: { $gt: 0 }, // Only users who have been reported at least once
+  })
+    .select("_id username email reportCount isBlocked name college course branch_section") // Select necessary fields
+    .lean();
+
+  if (!reportedUsers || reportedUsers.length === 0) {
+    throw new ApiError(404, "No reported users found for this college");
+  }
 
   return res
     .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        { user },
-        "User reported status updated successfully"
-      )
-    );
+    .json(new ApiResponse(200, { reportedUsers }, "Reported users from the same college fetched successfully"));
 });
 
 export {
@@ -305,5 +309,5 @@ export {
   getAllUsers,
   getUsersByCollege,
   deleteEvent,
-  handleUserReports,
+  getReportedUsersByCollege,
 };
