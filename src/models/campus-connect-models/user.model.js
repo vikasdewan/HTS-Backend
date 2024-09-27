@@ -70,6 +70,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    reportCount: {
+      type: Number,
+      default: 0,
+    },
     // Friend relationships
     friends: [
       {

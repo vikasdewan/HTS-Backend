@@ -13,7 +13,8 @@ import {
   updateAccountDetails,
   updateProfileImage,
   getAllUserOfCollage,
-  applyForEventOrganizer
+  applyForEventOrganizer,
+  reportUser
 } from "../controllers/campus-connect/user.controllers.js";
 
 //Event controllers import
@@ -71,6 +72,7 @@ router.route("/user/eventorganizer/apply").post(verifyJWT, applyForEventOrganize
 router
   .route("/user/update/profileImage")
   .patch(verifyJWT, upload.single("profileImage"), updateProfileImage);
+router.route("/user/report/:reportedUserId").post(verifyJWT,reportUser);
 
 //Event Related Route
 router.route("/event/add").post(verifyJWT, upload.single("poster"), addEvent);

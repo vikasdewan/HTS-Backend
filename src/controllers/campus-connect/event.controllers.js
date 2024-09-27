@@ -27,7 +27,6 @@ const addEvent = asyncHandler(async (req, res) => {
   if (posterLocalPath) {
     poster = await uploadOnCloudinary(posterLocalPath);
   }
-  console.log("poster :  ",poster)
   const event = await EventModel.create({
     title,
     location,
