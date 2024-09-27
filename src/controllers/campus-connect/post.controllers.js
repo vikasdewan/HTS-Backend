@@ -54,8 +54,11 @@ const updatePost = asyncHandler(async (req, res) => {
   if (post.postedBy.toString() !== userId.toString()) {
     throw new ApiError(403, "Unauthorized to update this post");
   }
-
-  const updatedPost = await PostModel.findByIdAndUpdate(id, req.body, {
+  const {content} = req.body;
+  if(!content){
+    throw new ApiError(404,"Content is required to update")
+  }
+  const updatedPost = await PostModel.findByIdAndUpdate(id, {content}, {
     new: true,
     runValidators: true,
   });
