@@ -76,8 +76,8 @@ router
 router.route("/event/add").post(verifyJWT, upload.single("poster"), addEvent);
 router.route("/event/update/:id").patch(verifyJWT, updateEvent);
 router.route("/event/delete/:id").delete(verifyJWT, deleteEvent);
-router.route("/event/:id").get(verifyJWT, getEventDetails);
 router.route("/event/all").get(verifyJWT, getAllEvents);
+router.route("/event/:id").get(verifyJWT, getEventDetails);
 router.route("/event/all-collage").get(verifyJWT, getAllEventOfCollage);
 
 //Friend Related Route

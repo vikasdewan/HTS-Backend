@@ -33,13 +33,8 @@ const registerUser = asyncHandler(async (req, res) => {
     college,
     course,
     branch_section,
-    year,
-<<<<<<< HEAD
-  } = await req.body;
-=======
-    college
+    year
   } = req.body;
->>>>>>> cdfc03e5c2ceb3f5cfca356db9a1002b55a6cf05
   //check for data availability
   if (
     !(
@@ -148,7 +143,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 //Password Changing
 const changeCurrentPassword = asyncHandler(async (req, res) => {
   //taking input from user
-  const { oldPassword, newPassword } = req.body;
+  const { oldPassword, newPassword } = await req.body;
   const user = await UserModel.findById(req.user?._id);
   const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
   if (!isPasswordCorrect) {
