@@ -53,7 +53,8 @@ import{
   deletePost,
   getAllPosts,
   likeUnlikePost,
-  addComment
+  addComment,
+  getUserPosts
 } from '../controllers/campus-connect/post.controllers.js'
 
 //Routes for User
@@ -99,9 +100,10 @@ router.route("/career/college/all").get(verifyJWT, getAllOpportunitiesOfCollege)
 
 //Post Related Routes
 router.route("/post/add").post(verifyJWT, upload.single("postImage"), addPost);
+router.route("/post/all").get(verifyJWT, getAllPosts);
+router.route("/post/my").get(verifyJWT, getUserPosts);
+router.route("/post/like-unlike/:id").post(verifyJWT, likeUnlikePost);
 router.route("/post/update/:id").patch(verifyJWT, updatePost);
 router.route("/post/delete/:id").delete(verifyJWT, deletePost);
-router.route("/post/all").get(verifyJWT, getAllPosts);
-router.route("/post/like-unlike/:id").post(verifyJWT, likeUnlikePost);
 router.route("/post/comment/:id").post(verifyJWT, addComment);
 export default router;

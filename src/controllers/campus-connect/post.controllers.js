@@ -90,17 +90,43 @@ const getAllPosts = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const user = await UserModel.findById(userId);
 
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  // Fetch all posts from the user's college
   const posts = await PostModel.find({ college: user.college })
     .populate("postedBy", "name profileImage")
-    .populate("comments.commentedBy", "name");
+    .populate("comments.commentedBy", "name profileImage");
 
   if (!posts || posts.length === 0) {
     throw new ApiError(404, "No posts available for your college");
   }
+  const formattedPosts = posts.map((post) => ({
+    _id: post._id,
+    content: post.content,
+    postedBy: {
+      name: post.postedBy.name,
+      profileImage: post.postedBy.profileImage,
+    },
+    college: post.college,
+    postImage: post.postImage,
+    likesCount: post.likes.length, // Number of likes
+    comments: post.comments.map((comment) => ({
+      commentText: comment.commentText,
+      commentedBy: {
+        name: comment.commentedBy.name,
+        profileImage: comment.commentedBy.profileImage,
+      },
+      commentedAt: comment.commentedAt,
+    })),
+    createdAt: post.createdAt,
+    updatedAt: post.updatedAt,
+  }));
 
   return res
     .status(200)
-    .json(new ApiResponse(200, { posts }, "Posts fetched successfully"));
+    .json(new ApiResponse(200, { posts: formattedPosts }, "Posts fetched successfully"));
 });
 
 // Like/Unlike a Post
@@ -155,6 +181,31 @@ const addComment = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { post }, "Comment added successfully"));
 });
 
+//get user post 
+// Get Posts of a Specific User
+const getUserPosts = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  // Fetch all posts by the user
+  const posts = await PostModel.find({ postedBy: userId })
+    .populate("postedBy", "name profileImage")
+    .populate("comments.commentedBy", "name profileImage");
+
+  if (!posts || posts.length === 0) {
+    throw new ApiError(404, "No posts found for this user");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { posts }, "User posts fetched successfully"));
+});
+
+
 export {
   addPost,
   updatePost,
@@ -162,4 +213,5 @@ export {
   getAllPosts,
   likeUnlikePost,
   addComment,
+  getUserPosts
 };
