@@ -27,14 +27,18 @@ const productSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "Users",
     },
-    images: {
-      type: [String],
+    image: {
+      type: String,
       required: true,
     },
     sold: {
       type: Boolean,
       default: false,
     },
+    college:{
+      type:String,
+      required:true
+    }
   },
   { timestamps: true }
 );
