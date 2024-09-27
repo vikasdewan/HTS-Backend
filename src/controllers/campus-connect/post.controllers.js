@@ -184,7 +184,7 @@ const addComment = asyncHandler(async (req, res) => {
 //get user post 
 // Get Posts of a Specific User
 const getUserPosts = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.user?._id;
 
   const user = await UserModel.findById(userId);
   if (!user) {
