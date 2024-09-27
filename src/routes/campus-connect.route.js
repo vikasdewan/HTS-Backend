@@ -94,9 +94,9 @@ router.route("/friend/all").get(verifyJWT, getAllFriends);
 router.route("/career/add").post(verifyJWT, addOpportunity);
 router.route("/career/update/:id").patch(verifyJWT, updateOpportunity);
 router.route("/career/delete/:id").delete(verifyJWT, deleteOpportunity);
-router.route("/career/:id").get(verifyJWT, getOpportunityDetails);
 router.route("/career/all").get(verifyJWT, getAllOpportunities);
 router.route("/career/college/all").get(verifyJWT, getAllOpportunitiesOfCollege);
+router.route("/career/:id").get(verifyJWT, getOpportunityDetails);
 
 //Post Related Routes
 router.route("/post/add").post(verifyJWT, upload.single("postImage"), addPost);

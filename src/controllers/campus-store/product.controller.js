@@ -1,4 +1,7 @@
 import ProductsModel from "../../models/campus-store-models/products.model.js";
+import { uploadOnCloudinary } from "../../utils/cloudinary.js";
+import { asyncHandler } from "../../utils/asyncHandler.js";
+
 export async function getAllProducts(req, res) {
   try {
     const products = await ProductsModel.find();
@@ -10,19 +13,45 @@ export async function getAllProducts(req, res) {
     return res.status(500).json({ message: "Internal server error occured" });
   }
 }
+const addNewProduct = asyncHandler(async (req, res) => {
+  const { name,description,price,category } = req.body;
+  const userId = req.user._id;
 
-export async function addNewProduct(req, res) {
-  try {
-    const product = new ProductsModel(req.body);
-    await product.save();
-    if (!product) {
-      return res.status(400).json({ message: "Failed to add product" });
-    }
-    return res.status(201).json({ product });
-  } catch (error) {
-    return res.status(500).json({ message: "Internal server error occured" });
+  if (!(name && description && price && category ) ){
+    throw new ApiError(400, "Content is required");
   }
-}
+
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const productImageLocalPath = req.file?.path;
+  let productImage;
+  if (productImageLocalPath) {
+    productImage = await uploadOnCloudinary(productImageLocalPath);
+  }
+
+  const product = await PostModel.create({
+    name,
+    description,
+    price,
+    category,
+    postedBy: userId,
+    college: user.college,
+    productImage: productImage?.secure_url || "",
+  });
+
+  if (!product) {
+    throw new ApiError(400, "Error while creating post");
+  }
+
+  return res
+    .status(201)
+    .json(new ApiResponse(201, { product }, "Post added successfully"));
+});
+
+
 
 export async function getProductById(req, res) {
   try {
@@ -63,3 +92,8 @@ export async function deleteProductById(req, res) {
     return res.status(500).json({ message: "Internal server error occured" });
   }
 }
+
+
+export {
+  addNewProduct,
+};

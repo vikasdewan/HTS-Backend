@@ -9,7 +9,7 @@ import express from "express";
 const router = express.Router();
 
 router.get("/product", getAllProducts);
-router.post("/product", addNewProduct);
+router.post("/product/add", addNewProduct);
 router.get("/product/:id", getProductById);
 router.put("/product/:id", updateProductById);
 router.delete("/product/:id", deleteProductById);
