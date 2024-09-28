@@ -7,9 +7,9 @@ import { uploadOnCloudinary } from "../../utils/cloudinary.js";
 
 // Adding a New Product
 const addNewProduct = asyncHandler(async (req, res) => {
-  const { name, description, price, category } = req.body;
+  const { name, description, price, category,phone } = req.body;
   
-  if (!(name && description && price && category)) {
+  if (!(name && description && price && category&&phone)) {
     throw new ApiError(400, "All fields are mandatory");
   }
 
@@ -29,6 +29,7 @@ const addNewProduct = asyncHandler(async (req, res) => {
     name,
     description,
     price,
+    phone,
     category,
     sellerId: userId,
     image: productImage ? productImage.secure_url : "",

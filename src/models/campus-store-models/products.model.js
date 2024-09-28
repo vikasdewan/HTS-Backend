@@ -14,6 +14,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    phone:{
+      type:String,
+      required:true
+    },
     description: {
       type: String,
       required: true,
